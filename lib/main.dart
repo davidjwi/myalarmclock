@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:android_alarm_manager/android_alarm_manager.dart';
+import 'package:alarmclock/alarmclock.dart';
 
 void main() => runApp(new MyApp());
 
@@ -44,6 +44,9 @@ class _MyHomePageState extends State<MyHomePage> {
       _formattedTime = new DateFormat('jm').format(_wakeupTime);
     });
   }
+  void _setAlarm() {
+    Alarmclock.setAlarm(skipui:true, hour:13, minute:14);
+  }
 
 
   @override
@@ -86,14 +89,18 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_formattedTime',
               style: Theme.of(context).textTheme.display1,
             ),
+            new FloatingActionButton(
+                onPressed: _newwakeuptime,
+                tooltip: 'Wake up at',
+                child: new Icon(Icons.add),
+                ),
+            new FloatingActionButton(
+                onPressed: _setAlarm,
+                child: new Icon(Icons.alarm),
+                ),
           ],
         ),
       ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: _newwakeuptime,
-        tooltip: 'Wake up at',
-        child: new Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+      );
   }
 }
