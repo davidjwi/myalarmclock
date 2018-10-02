@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
+  
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -37,15 +38,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  var _wakeupTime = new DateTime.now().add(new Duration(minutes:465));
   String _formattedTime = '';
-  void _newwakeuptime() {
-    setState(() {
-      var _wakeupTime = new DateTime.now().add(new Duration(minutes:465));
-      _formattedTime = new DateFormat('jm').format(_wakeupTime);
-    });
-  }
+  int newHour = 0;
+  int newMinute = 0;
+
   void _setAlarm() {
-    Alarmclock.setAlarm(skipui:true, hour:13, minute:14);
+    Alarmclock.setAlarm(skipui:true, hour:newHour, minute:newMinute);
+  }
+
+  void _getwakeuptimes() {
+    _formattedTime = new DateFormat('jm').format(_wakeupTime);
+    newHour = _wakeupTime.hour;
+    newMinute = _wakeupTime.minute;
+  }
+  void _updateClocks() {
+    setState(() {
+      _getwakeuptimes();
+    });
   }
 
 
@@ -57,50 +68,48 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+
+    _getwakeuptimes();
+
     return new Scaffold(
-      appBar: new AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
+        appBar: new AppBar(
         title: new Text(widget.title),
       ),
       body: new Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: new Column(
-          // Column is also layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug paint" (press "p" in the console where you ran
-          // "flutter run", or select "Toggle Debug Paint" from the Flutter tool
-          // window in IntelliJ) to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Text(
-              'Try to wake up at',
-            ),
-            new Text(
-              '$_formattedTime',
-              style: Theme.of(context).textTheme.display1,
-            ),
-            new FloatingActionButton(
-                onPressed: _newwakeuptime,
-                tooltip: 'Wake up at',
-                child: new Icon(Icons.add),
+          child: new Container(
+              padding: const EdgeInsets.all(34.0),
+              alignment: Alignment.center,
+              child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                        '$_formattedTime',
+                        style: new TextStyle(
+                            fontSize: 30.0,
+                            ),
+                        ),
+                    FloatingActionButton(
+                        onPressed: _setAlarm,
+                        child: new Icon(Icons.alarm),
+                        ),
+                  ],
                 ),
-            new FloatingActionButton(
-                onPressed: _setAlarm,
-                child: new Icon(Icons.alarm),
-                ),
-          ],
-        ),
-      ),
+              ),
+         ),
       );
   }
 }
+//          children: <Widget>[
+//            new Text(
+//              'Try to wake up at $_formattedTime',
+//              style: Theme.of(context).textTheme.display1,
+//            ),
+//            new FloatingActionButton(
+//                onPressed: _updateClocks,
+//                tooltip: 'Wake up at',
+//                child: new Icon(Icons.add),
+//                ),
+//            new FloatingActionButton(
+//                onPressed: _setAlarm,
+//                child: new Icon(Icons.alarm),
+//                ),
