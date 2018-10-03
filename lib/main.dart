@@ -39,20 +39,31 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  var _firstTime = new DateTime.now().add(new Duration(minutes:400));
   var _wakeupTime = new DateTime.now().add(new Duration(minutes:465));
+  var _afterTime = new DateTime.now().add(new Duration(minutes:505));
   String _formattedTime = '';
+  String _fmtFirstTime, _fmtAfterTime = '';
   int newHour = 0;
   int newMinute = 0;
+  int newFirstHour, newFirstMinute, newAfterHour, newAfterMinute = 0;
 
-  void _setAlarm() {
-    Alarmclock.setAlarm(skipui:true, hour:newHour, minute:newMinute);
+  void _setAlarm(int anHour, int anMinute) {
+    Alarmclock.setAlarm(skipui:true, hour:anHour, minute:anMinute);
   }
 
   void _getwakeuptimes() {
     _formattedTime = new DateFormat('jm').format(_wakeupTime);
+    _fmtFirstTime = new DateFormat('jm').format(_firstTime);
+    _fmtAfterTime = new DateFormat('jm').format(_afterTime);
     newHour = _wakeupTime.hour;
     newMinute = _wakeupTime.minute;
+    newFirstHour = _firstTime.hour;
+    newFirstMinute = _firstTime.minute;
+    newAfterHour = _afterTime.hour;
+    newAfterMinute = _afterTime.minute;
   }
+
   void _updateClocks() {
     setState(() {
       _getwakeuptimes();
@@ -71,45 +82,76 @@ class _MyHomePageState extends State<MyHomePage> {
 
     _getwakeuptimes();
 
+    Widget firstRow = Container(
+        padding: const EdgeInsets.all(34.0),
+        alignment: Alignment.center,
+        child: new Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                  '$_fmtFirstTime',
+                  style: new TextStyle( fontSize: 30.0,),
+                  ),
+              FloatingActionButton(
+                  onPressed: () => _setAlarm(newFirstHour, newFirstMinute),
+                  child: new Icon(Icons.alarm),
+                  ),
+            ],
+            ),
+        );
+
+    Widget secondRow = Container(
+        padding: const EdgeInsets.all(34.0),
+        alignment: Alignment.center,
+        child: new Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                  '$_formattedTime',
+                  style: new TextStyle( fontSize: 30.0,),
+                  ),
+              FloatingActionButton(
+                  onPressed: () => _setAlarm(newHour, newMinute),
+                  child: new Icon(Icons.alarm),
+                  ),
+            ],
+            ),
+        );
+
+    Widget thirdRow = Container(
+        padding: const EdgeInsets.all(34.0),
+        alignment: Alignment.center,
+        child: new Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                  '$_fmtAfterTime',
+                  style: new TextStyle( fontSize: 30.0,),
+                  ),
+              FloatingActionButton(
+                  onPressed: () => _setAlarm(newAfterHour, newAfterMinute),
+                  child: new Icon(Icons.alarm),
+                  ),
+            ],
+            ),
+        );
+
     return new Scaffold(
         appBar: new AppBar(
         title: new Text(widget.title),
       ),
-      body: new Center(
-          child: new Container(
-              padding: const EdgeInsets.all(34.0),
-              alignment: Alignment.center,
-              child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                        '$_formattedTime',
-                        style: new TextStyle(
-                            fontSize: 30.0,
-                            ),
-                        ),
-                    FloatingActionButton(
-                        onPressed: _setAlarm,
-                        child: new Icon(Icons.alarm),
-                        ),
-                  ],
-                ),
-              ),
-         ),
+      body: ListView(
+          children: [
+             firstRow,
+             secondRow,
+             thirdRow,
+             ],
+             ),
       );
   }
 }
-//          children: <Widget>[
-//            new Text(
-//              'Try to wake up at $_formattedTime',
-//              style: Theme.of(context).textTheme.display1,
-//            ),
 //            new FloatingActionButton(
 //                onPressed: _updateClocks,
 //                tooltip: 'Wake up at',
 //                child: new Icon(Icons.add),
-//                ),
-//            new FloatingActionButton(
-//                onPressed: _setAlarm,
-//                child: new Icon(Icons.alarm),
 //                ),
