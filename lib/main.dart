@@ -69,6 +69,24 @@ class _MyHomePageState extends State<MyHomePage> {
       _getwakeuptimes();
     });
   }
+  
+  Row buildStandardRow(String formattedTimeValue, int newAlarmHour, int newAlarmMinute) {
+  
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text(
+              '$formattedTimeValue',
+              style: new TextStyle( fontSize: 30.0,),
+              ),
+          FloatingActionButton(
+              onPressed: () => _setAlarm(newAlarmHour, newAlarmMinute),
+              child: new Icon(Icons.alarm),
+              ),
+        ],
+        );
+  
+  }
 
 
   @override
@@ -85,56 +103,19 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget firstRow = Container(
         padding: const EdgeInsets.all(34.0),
         alignment: Alignment.center,
-        child: new Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                  '$_fmtFirstTime',
-                  style: new TextStyle( fontSize: 30.0,),
-                  ),
-              FloatingActionButton(
-                  onPressed: () => _setAlarm(newFirstHour, newFirstMinute),
-                  child: new Icon(Icons.alarm),
-                  ),
-            ],
-            ),
+        child:  buildStandardRow(_fmtFirstTime, newFirstHour, newFirstMinute)
         );
-
     Widget secondRow = Container(
         padding: const EdgeInsets.all(34.0),
         alignment: Alignment.center,
-        child: new Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                  '$_formattedTime',
-                  style: new TextStyle( fontSize: 30.0,),
-                  ),
-              FloatingActionButton(
-                  onPressed: () => _setAlarm(newHour, newMinute),
-                  child: new Icon(Icons.alarm),
-                  ),
-            ],
-            ),
+        child:  buildStandardRow(_formattedTime, newHour, newMinute)
         );
-
-    Widget thirdRow = Container(
+    Widget thirdRow  = Container(
         padding: const EdgeInsets.all(34.0),
         alignment: Alignment.center,
-        child: new Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                  '$_fmtAfterTime',
-                  style: new TextStyle( fontSize: 30.0,),
-                  ),
-              FloatingActionButton(
-                  onPressed: () => _setAlarm(newAfterHour, newAfterMinute),
-                  child: new Icon(Icons.alarm),
-                  ),
-            ],
-            ),
+        child:  buildStandardRow(_fmtAfterTime, newAfterHour, newAfterMinute)
         );
+
 
     return new Scaffold(
         appBar: new AppBar(
