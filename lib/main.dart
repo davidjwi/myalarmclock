@@ -5,14 +5,11 @@ import 'package:alarmclock/alarmclock.dart';
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'My Alarm App',
-      theme: new ThemeData(
-        primarySwatch: Colors.red,
-      ),
+      theme: new ThemeData(primarySwatch: Colors.red),
       home: new MyHomePage(title: 'Alarm Home Page'),
     );
   }
@@ -20,48 +17,35 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
-  
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
-
   @override
   _MyHomePageState createState() => new _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  var _firstTime = new DateTime.now().add(new Duration(minutes:400));
-  var _wakeupTime = new DateTime.now().add(new Duration(minutes:465));
-  var _afterTime = new DateTime.now().add(new Duration(minutes:505));
-  String _formattedTime = '';
-  String _fmtFirstTime, _fmtAfterTime = '';
-  int newHour = 0;
-  int newMinute = 0;
-  int newFirstHour, newFirstMinute, newAfterHour, newAfterMinute = 0;
+  var firstAlarmValue = new DateTime.now().add(new Duration(minutes:400));
+  var secondAlarmValue = new DateTime.now().add(new Duration(minutes:465));
+  var thirdAlarmValue = new DateTime.now().add(new Duration(minutes:505));
 
-  void _setAlarm(int anHour, int anMinute) {
-    Alarmclock.setAlarm(skipui:true, hour:anHour, minute:anMinute);
+  String firstAlarmFormatted, secondAlarmFormatted, thirdAlarmFormatted = '';
+
+  int newHour, newMinute, newFirstHour, newFirstMinute, newAfterHour, newAfterMinute = 0;
+
+  void _setAlarm(int setAlarmHour, int setAlarmMinute) {
+    Alarmclock.setAlarm(skipui:true, hour:setAlarmHour, minute:setAlarmMinute);
   }
 
   void _getwakeuptimes() {
-    _formattedTime = new DateFormat('jm').format(_wakeupTime);
-    _fmtFirstTime = new DateFormat('jm').format(_firstTime);
-    _fmtAfterTime = new DateFormat('jm').format(_afterTime);
-    newHour = _wakeupTime.hour;
-    newMinute = _wakeupTime.minute;
-    newFirstHour = _firstTime.hour;
-    newFirstMinute = _firstTime.minute;
-    newAfterHour = _afterTime.hour;
-    newAfterMinute = _afterTime.minute;
+    firstAlarmFormatted = new DateFormat('jm').format(firstAlarmValue);
+    secondAlarmFormatted = new DateFormat('jm').format(secondAlarmValue);
+    thirdAlarmFormatted = new DateFormat('jm').format(thirdAlarmValue);
+    newHour = secondAlarmValue.hour;
+    newMinute = secondAlarmValue.minute;
+    newFirstHour = firstAlarmValue.hour;
+    newFirstMinute = firstAlarmValue.minute;
+    newAfterHour = thirdAlarmValue.hour;
+    newAfterMinute = thirdAlarmValue.minute;
   }
 
   void _updateClocks() {
@@ -79,11 +63,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   
   Row buildStandardRow(String formattedTimeValue, int newAlarmHour, int newAlarmMinute) {
-  
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text(
+          Text( 
               '$formattedTimeValue',
               style: new TextStyle( fontSize: 30.0,),
               ),
@@ -109,15 +92,15 @@ class _MyHomePageState extends State<MyHomePage> {
     _getwakeuptimes();
 
     Widget firstRow = buildStandardContainer(
-        buildStandardRow(_fmtFirstTime, newFirstHour, newFirstMinute)
+        buildStandardRow(firstAlarmFormatted, newFirstHour, newFirstMinute)
         );
 
     Widget secondRow = buildStandardContainer(
-        buildStandardRow(_formattedTime, newHour, newMinute)
+        buildStandardRow(secondAlarmFormatted, newHour, newMinute)
         );
 
     Widget thirdRow  = buildStandardContainer(
-        buildStandardRow(_fmtAfterTime, newAfterHour, newAfterMinute)
+        buildStandardRow(thirdAlarmFormatted, newAfterHour, newAfterMinute)
         );
 
      Widget fourthRow = buildStandardContainer(
