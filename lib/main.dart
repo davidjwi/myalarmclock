@@ -69,6 +69,14 @@ class _MyHomePageState extends State<MyHomePage> {
       _getwakeuptimes();
     });
   }
+
+  Container buildStandardContainer(Row childRow) {
+    return Container(
+        padding: const EdgeInsets.all(34.0),
+        alignment: Alignment.center,
+        child: childRow,
+        );
+  }
   
   Row buildStandardRow(String formattedTimeValue, int newAlarmHour, int newAlarmMinute) {
   
@@ -100,22 +108,29 @@ class _MyHomePageState extends State<MyHomePage> {
 
     _getwakeuptimes();
 
-    Widget firstRow = Container(
-        padding: const EdgeInsets.all(34.0),
-        alignment: Alignment.center,
-        child:  buildStandardRow(_fmtFirstTime, newFirstHour, newFirstMinute)
-        );
-    Widget secondRow = Container(
-        padding: const EdgeInsets.all(34.0),
-        alignment: Alignment.center,
-        child:  buildStandardRow(_formattedTime, newHour, newMinute)
-        );
-    Widget thirdRow  = Container(
-        padding: const EdgeInsets.all(34.0),
-        alignment: Alignment.center,
-        child:  buildStandardRow(_fmtAfterTime, newAfterHour, newAfterMinute)
+    Widget firstRow = buildStandardContainer(
+        buildStandardRow(_fmtFirstTime, newFirstHour, newFirstMinute)
         );
 
+    Widget secondRow = buildStandardContainer(
+        buildStandardRow(_formattedTime, newHour, newMinute)
+        );
+
+    Widget thirdRow  = buildStandardContainer(
+        buildStandardRow(_fmtAfterTime, newAfterHour, newAfterMinute)
+        );
+
+     Widget fourthRow = buildStandardContainer(
+         Row(
+             children: [
+               FloatingActionButton(
+                   onPressed:_updateClocks,
+                   tooltip: 'Update times',
+                   child: new Icon(Icons.refresh),
+                   ),
+             ],
+             ),
+         );
 
     return new Scaffold(
         appBar: new AppBar(
@@ -126,13 +141,9 @@ class _MyHomePageState extends State<MyHomePage> {
              firstRow,
              secondRow,
              thirdRow,
+             fourthRow,
              ],
              ),
       );
   }
 }
-//            new FloatingActionButton(
-//                onPressed: _updateClocks,
-//                tooltip: 'Wake up at',
-//                child: new Icon(Icons.add),
-//                ),
