@@ -23,110 +23,98 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  var firstAlarmValue = new DateTime.now().add(new Duration(minutes:400));
-  var secondAlarmValue = new DateTime.now().add(new Duration(minutes:465));
-  var thirdAlarmValue = new DateTime.now().add(new Duration(minutes:505));
-
-  String firstAlarmFormatted, secondAlarmFormatted, thirdAlarmFormatted = '';
-
-  int newHour, newMinute, newFirstHour, newFirstMinute, newAfterHour, newAfterMinute = 0;
+  var firstAlarmValue = new DateTime.now().add(new Duration(minutes: 400));
+  var secondAlarmValue = new DateTime.now().add(new Duration(minutes: 465));
+  var thirdAlarmValue = new DateTime.now().add(new Duration(minutes: 505));
 
   void _setAlarm(int setAlarmHour, int setAlarmMinute) {
-    Alarmclock.setAlarm(skipui:true, hour:setAlarmHour, minute:setAlarmMinute);
+    Alarmclock.setAlarm(
+        skipui: true, hour: setAlarmHour, minute: setAlarmMinute);
   }
 
-  void _getwakeuptimes() {
-    firstAlarmFormatted = new DateFormat('jm').format(firstAlarmValue);
-    secondAlarmFormatted = new DateFormat('jm').format(secondAlarmValue);
-    thirdAlarmFormatted = new DateFormat('jm').format(thirdAlarmValue);
-    newHour = secondAlarmValue.hour;
-    newMinute = secondAlarmValue.minute;
-    newFirstHour = firstAlarmValue.hour;
-    newFirstMinute = firstAlarmValue.minute;
-    newAfterHour = thirdAlarmValue.hour;
-    newAfterMinute = thirdAlarmValue.minute;
+  String _formatAlarmValue(DateTime datetimeAlarmValue) {
+    return new DateFormat('jm').format(datetimeAlarmValue);
   }
 
   void _updateClocks() {
     setState(() {
-      _getwakeuptimes();
+      // Update all clock values here
+      firstAlarmValue = new DateTime.now().add(new Duration(minutes: 400));
+      secondAlarmValue = new DateTime.now().add(new Duration(minutes: 465));
+      thirdAlarmValue = new DateTime.now().add(new Duration(minutes: 505));
     });
   }
 
   Container buildStandardContainer(Row childRow) {
     return Container(
-        padding: const EdgeInsets.all(34.0),
-        alignment: Alignment.center,
-        child: childRow,
-        );
-  }
-  
-  Row buildStandardRow(String formattedTimeValue, int newAlarmHour, int newAlarmMinute) {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Text( 
-              '$formattedTimeValue',
-              style: new TextStyle( fontSize: 30.0,),
-              ),
-          FloatingActionButton(
-              onPressed: () => _setAlarm(newAlarmHour, newAlarmMinute),
-              child: new Icon(Icons.alarm),
-              ),
-        ],
-        );
-  
+      padding: const EdgeInsets.all(34.0),
+      alignment: Alignment.center,
+      child: childRow,
+    );
   }
 
+  Row buildStandardRow(
+      String formattedTimeValue, int newAlarmHour, int newAlarmMinute) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Text(
+          '$formattedTimeValue',
+          style: new TextStyle(
+            fontSize: 30.0,
+          ),
+        ),
+        FloatingActionButton(
+          onPressed: () => _setAlarm(newAlarmHour, newAlarmMinute),
+          child: new Icon(Icons.alarm),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    // This method is rerun every time setState is called
 
-    _getwakeuptimes();
+    Widget firstRow = buildStandardContainer(buildStandardRow(
+        _formatAlarmValue(firstAlarmValue),
+        firstAlarmValue.hour,
+        firstAlarmValue.minute));
 
-    Widget firstRow = buildStandardContainer(
-        buildStandardRow(firstAlarmFormatted, newFirstHour, newFirstMinute)
-        );
+    Widget secondRow = buildStandardContainer(buildStandardRow(
+        _formatAlarmValue(secondAlarmValue),
+        secondAlarmValue.hour,
+        secondAlarmValue.minute));
 
-    Widget secondRow = buildStandardContainer(
-        buildStandardRow(secondAlarmFormatted, newHour, newMinute)
-        );
+    Widget thirdRow = buildStandardContainer(buildStandardRow(
+        _formatAlarmValue(thirdAlarmValue),
+        thirdAlarmValue.hour,
+        thirdAlarmValue.minute));
 
-    Widget thirdRow  = buildStandardContainer(
-        buildStandardRow(thirdAlarmFormatted, newAfterHour, newAfterMinute)
-        );
-
-     Widget fourthRow = buildStandardContainer(
-         Row(
-             children: [
-               FloatingActionButton(
-                   onPressed:_updateClocks,
-                   tooltip: 'Update times',
-                   child: new Icon(Icons.refresh),
-                   ),
-             ],
-             ),
-         );
+    Widget fourthRow = buildStandardContainer(
+      Row(
+        children: [
+          FloatingActionButton(
+            onPressed: _updateClocks,
+            tooltip: 'Update times',
+            child: new Icon(Icons.refresh),
+          ),
+        ],
+      ),
+    );
 
     return new Scaffold(
-        appBar: new AppBar(
+      appBar: new AppBar(
         title: new Text(widget.title),
       ),
       body: ListView(
-          children: [
-             firstRow,
-             secondRow,
-             thirdRow,
-             fourthRow,
-             ],
-             ),
-      );
+        children: [
+          firstRow,
+          secondRow,
+          thirdRow,
+          fourthRow,
+        ],
+      ),
+    );
   }
 }
